@@ -1,3 +1,25 @@
+# =============================================================
+# ONE-TIME SETUP: Authenticate Pyrogram (first deploy only)
+# -------------------------------------------------------------
+# 1. Start the container:
+#      docker compose up -d
+#
+# 2. Open a shell inside it:
+#      docker compose exec dashboard bash
+#
+# 3. Inside the container, run:
+#      python3 generate_session.py
+#    Enter the OTP code Telegram sends to your phone.
+#    The session file is saved to /app/session/ automatically.
+#
+# 4. Exit the shell and restart:
+#      exit
+#      docker compose restart
+#
+# After this, the session persists in the 'session_data' volume
+# and you will never need to enter a code again.
+# =============================================================
+
 version: '3.8'
 
 services:
