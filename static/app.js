@@ -187,12 +187,26 @@ function openPreview(filename) {
             tooltips: { controls: true, seek: true },
         });
 
-        // Build audio track switcher once metadata is loaded
-        video.addEventListener('loadedmetadata', () => {
-            buildAudioTrackSwitcher(video, trackBar);
-            // Auto-enter fullscreen for video
-            _plyrInstance.fullscreen.enter();
-        });
+        // Build audio track switcher — try on multiple events + polling
+        // because Chrome may not populate audioTracks until after canplay/playing
+        let _trackBuilt = false;
+        function tryBuildTracks() {
+            if (_trackBuilt) return;
+            const tracks = video.audioTracks;
+            if (tracks && tracks.length > 0) {
+                _trackBuilt = true;
+                buildAudioTrackSwitcher(video, trackBar);
+            }
+        }
+        video.addEventListener('loadedmetadata', tryBuildTracks);
+        video.addEventListener('canplay', tryBuildTracks);
+        video.addEventListener('playing', tryBuildTracks);
+        // Fallback poll: check every 500 ms for up to 5 seconds
+        const _poll = setInterval(() => {
+            tryBuildTracks();
+            if (_trackBuilt) clearInterval(_poll);
+        }, 500);
+        setTimeout(() => clearInterval(_poll), 5000);
 
     } else if (audioExts.includes(ext)) {
         const wrap = document.createElement('div');
@@ -237,7 +251,7 @@ function openPreview(filename) {
 
 function buildAudioTrackSwitcher(video, bar) {
     const tracks = video.audioTracks; // HTMLAudioTrackList (Chrome/Edge)
-    if (!tracks || tracks.length <= 1) return; // nothing to switch
+    if (!tracks || tracks.length <= 1) return; // 0 or 1 track = nothing to switch
 
     bar.innerHTML = '<span class="audio-track-label">🔊 Audio Track:</span>';
 
@@ -245,17 +259,15 @@ function buildAudioTrackSwitcher(video, bar) {
         const t = tracks[i];
         const btn = document.createElement('button');
         btn.className = 'audio-track-btn' + (t.enabled ? ' active' : '');
-        btn.textContent = t.label || t.language || `Track ${i + 1}`;
+        // use label, then language code, then friendly fallback
+        btn.textContent = t.label || (t.language ? t.language.toUpperCase() : null) || `Track ${i + 1}`;
         btn.dataset.index = i;
 
         btn.addEventListener('click', () => {
-            // Disable all tracks, enable selected
-            for (let j = 0; j < tracks.length; j++) {
-                tracks[j].enabled = (j === i);
-            }
-            bar.querySelectorAll('.audio-track-btn').forEach((b, j) => {
-                b.classList.toggle('active', j === i);
-            });
+            for (let j = 0; j < tracks.length; j++) tracks[j].enabled = (j === i);
+            bar.querySelectorAll('.audio-track-btn').forEach((b, j) =>
+                b.classList.toggle('active', j === i)
+            );
         });
 
         bar.appendChild(btn);
