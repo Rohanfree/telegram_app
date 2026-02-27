@@ -130,6 +130,8 @@ function addFileToDownloads(filename, fileType, fileSize, username) {
 
 // ── File Preview Modal ──────────────────────────────────────
 
+let _plyrInstance = null;
+
 function openPreview(filename) {
     const modal = document.getElementById('preview-modal');
     const body = document.getElementById('preview-body');
@@ -150,13 +152,48 @@ function openPreview(filename) {
     const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
     const pdfExts = ['pdf'];
 
-    let content;
     if (videoExts.includes(ext)) {
-        content = document.createElement('video');
-        content.controls = true;
-        content.autoplay = false;
-        content.src = streamUrl;
-        content.className = 'preview-video';
+        // ── Video: use Plyr for rich controls + audio track switching ──
+        const video = document.createElement('video');
+        video.className = 'preview-video';
+        video.controls = true;
+        video.crossOrigin = 'anonymous';
+
+        const source = document.createElement('source');
+        source.src = streamUrl;
+        video.appendChild(source);
+
+        const wrap = document.createElement('div');
+        wrap.className = 'preview-video-wrap';
+        wrap.appendChild(video);
+
+        // Audio track switcher placeholder (filled after Plyr ready)
+        const trackBar = document.createElement('div');
+        trackBar.className = 'audio-track-bar';
+        trackBar.id = 'audio-track-bar';
+        wrap.appendChild(trackBar);
+
+        body.appendChild(wrap);
+
+        // Init Plyr
+        if (_plyrInstance) { _plyrInstance.destroy(); _plyrInstance = null; }
+        _plyrInstance = new Plyr(video, {
+            controls: ['play-large', 'play', 'rewind', 'fast-forward', 'progress',
+                'current-time', 'duration', 'mute', 'volume', 'captions',
+                'settings', 'pip', 'airplay', 'fullscreen'],
+            settings: ['quality', 'speed', 'loop'],
+            keyboard: { focused: true, global: true },
+            fullscreen: { enabled: true, fallback: true, iosNative: true },
+            tooltips: { controls: true, seek: true },
+        });
+
+        // Build audio track switcher once metadata is loaded
+        video.addEventListener('loadedmetadata', () => {
+            buildAudioTrackSwitcher(video, trackBar);
+            // Auto-enter fullscreen for video
+            _plyrInstance.fullscreen.enter();
+        });
+
     } else if (audioExts.includes(ext)) {
         const wrap = document.createElement('div');
         wrap.className = 'preview-audio-wrap';
@@ -165,46 +202,85 @@ function openPreview(filename) {
         icon.textContent = '🎵';
         const audio = document.createElement('audio');
         audio.controls = true;
-        audio.autoplay = false;
         audio.src = streamUrl;
         audio.className = 'preview-audio';
         wrap.appendChild(icon);
         wrap.appendChild(audio);
-        content = wrap;
+        body.appendChild(wrap);
+
     } else if (imageExts.includes(ext)) {
-        content = document.createElement('img');
-        content.src = streamUrl;
-        content.alt = filename;
-        content.className = 'preview-image';
+        const img = document.createElement('img');
+        img.src = streamUrl;
+        img.alt = filename;
+        img.className = 'preview-image';
+        body.appendChild(img);
+
     } else if (pdfExts.includes(ext)) {
-        content = document.createElement('iframe');
-        content.src = streamUrl;
-        content.className = 'preview-pdf';
-        content.title = filename;
+        const frame = document.createElement('iframe');
+        frame.src = streamUrl;
+        frame.className = 'preview-pdf';
+        frame.title = filename;
+        body.appendChild(frame);
+
     } else {
-        content = document.createElement('div');
-        content.className = 'preview-unsupported';
-        content.innerHTML = `<div style="font-size:3rem">📄</div>
+        const div = document.createElement('div');
+        div.className = 'preview-unsupported';
+        div.innerHTML = `<div style="font-size:3rem">📄</div>
             <p>Cannot preview this file type.</p>
             <a href="${downloadUrl}" download="${escapeHtml(filename)}" class="preview-download-btn" style="display:inline-flex;margin-top:1rem">⬇ Download instead</a>`;
+        body.appendChild(div);
     }
 
-    body.appendChild(content);
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
+}
+
+function buildAudioTrackSwitcher(video, bar) {
+    const tracks = video.audioTracks; // HTMLAudioTrackList (Chrome/Edge)
+    if (!tracks || tracks.length <= 1) return; // nothing to switch
+
+    bar.innerHTML = '<span class="audio-track-label">🔊 Audio Track:</span>';
+
+    for (let i = 0; i < tracks.length; i++) {
+        const t = tracks[i];
+        const btn = document.createElement('button');
+        btn.className = 'audio-track-btn' + (t.enabled ? ' active' : '');
+        btn.textContent = t.label || t.language || `Track ${i + 1}`;
+        btn.dataset.index = i;
+
+        btn.addEventListener('click', () => {
+            // Disable all tracks, enable selected
+            for (let j = 0; j < tracks.length; j++) {
+                tracks[j].enabled = (j === i);
+            }
+            bar.querySelectorAll('.audio-track-btn').forEach((b, j) => {
+                b.classList.toggle('active', j === i);
+            });
+        });
+
+        bar.appendChild(btn);
+    }
 }
 
 function closePreview() {
     const modal = document.getElementById('preview-modal');
     const body = document.getElementById('preview-body');
+
+    if (_plyrInstance) {
+        try { _plyrInstance.fullscreen.exit(); } catch (_) { }
+        _plyrInstance.destroy();
+        _plyrInstance = null;
+    }
+
     modal.classList.remove('open');
-    body.innerHTML = '';  // stop any playing media
+    body.innerHTML = '';
     document.body.style.overflow = '';
 }
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closePreview();
 });
+
 
 // ────────────────────────────────────────────────────────────
 

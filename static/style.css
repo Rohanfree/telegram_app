@@ -732,15 +732,15 @@ body {
 .preview-container {
     position: relative;
     z-index: 1;
-    background: rgba(19, 21, 29, 0.92);
+    background: rgba(19, 21, 29, 0.96);
     border: 1px solid rgba(99, 102, 241, 0.3);
     border-radius: 20px;
-    width: min(92vw, 960px);
-    max-height: 90vh;
+    width: min(98vw, 1400px);
+    max-height: 96vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(99, 102, 241, 0.1);
     animation: modalIn 0.25s ease;
 }
 
@@ -839,12 +839,34 @@ body {
     min-height: 200px;
 }
 
+.preview-video-wrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+}
+
 .preview-video {
-    max-width: 100%;
-    max-height: 70vh;
+    width: 100%;
+    max-height: 78vh;
     border-radius: 10px;
     background: #000;
+    display: block;
 }
+
+/* ── Plyr theme override ─────────────────────────────────── */
+:root {
+    --plyr-color-main: #6366f1;
+    --plyr-video-background: #000;
+    --plyr-range-fill-background: #6366f1;
+    --plyr-control-radius: 8px;
+}
+
+.plyr--video .plyr__controls {
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    border-radius: 0 0 10px 10px;
+}
+
 
 .preview-image {
     max-width: 100%;
@@ -887,4 +909,54 @@ body {
 .preview-unsupported p {
     margin-top: 0.75rem;
     font-size: 0.95rem;
+}
+
+/* ── Audio track switcher bar ────────────────────────────── */
+.audio-track-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem 0.25rem;
+    min-height: 0;
+}
+
+.audio-track-bar:empty {
+    display: none;
+}
+
+.audio-track-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+    font-weight: 600;
+    margin-right: 0.25rem;
+}
+
+.audio-track-btn {
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    background: rgba(99, 102, 241, 0.08);
+    color: #94a3b8;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: inherit;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.audio-track-btn:hover {
+    background: rgba(99, 102, 241, 0.22);
+    border-color: rgba(99, 102, 241, 0.6);
+    color: #c7d2fe;
+}
+
+.audio-track-btn.active {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.5), rgba(139, 92, 246, 0.35));
+    border-color: #6366f1;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
 }
