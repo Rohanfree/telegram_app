@@ -10,9 +10,13 @@ services:
     volumes:
       - ./.env:/app/.env:ro
       - ./downloads:/app/downloads
-      # Pre-generated session file (run generate_session.py once locally first)
-      - ./pyrogram_session.session:/app/session/pyrogram_session.session
+      # Named volume for Pyrogram session — avoids Docker creating a directory
+      # by mistake when the .session file doesn't exist on the host yet.
+      - session_data:/app/session
     environment:
       - HOST=0.0.0.0
       - PORT=8000
       - RELOAD=false
+
+volumes:
+  session_data:
