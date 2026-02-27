@@ -10,11 +10,9 @@ services:
     volumes:
       - ./.env:/app/.env:ro
       - ./downloads:/app/downloads
-      - session_data:/app/session
+      # Pre-generated session file (run generate_session.py once locally first)
+      - ./pyrogram_session.session:/app/session/pyrogram_session.session
     environment:
       - HOST=0.0.0.0
       - PORT=8000
       - RELOAD=false
-
-volumes:
-  session_data:
