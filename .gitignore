@@ -34,3 +34,4 @@ downloads/
 .vscode/
 .idea/
 telegram-gemini-dashboard.zip
+pyrogram_session.session
