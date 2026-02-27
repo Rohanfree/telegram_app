@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  dashboard:
+    build: .
+    container_name: telegram-dashboard
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./.env:/app/.env
+      - ./downloads:/app/downloads
+      - ./pyrogram_session.session:/app/pyrogram_session.session
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - RELOAD=false

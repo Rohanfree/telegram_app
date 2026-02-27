@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+.git/
+.vscode/
+downloads/*
+!downloads/.gitkeep
+pyrogram_session.session
+pyrogram_session.session-journal
+.env
+Dockerfile
+docker-compose.yml
+.dockerignore

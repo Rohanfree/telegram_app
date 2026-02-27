@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <span class="gradient-text">Telegram</span> Dashboard
+                </h1>
+                <div class="status-badges">
+                    <div class="badge" id="ws-status">
+                        <span class="badge-dot offline"></span>
+                        <span>WebSocket</span>
+                    </div>
+                    <div class="badge" id="bot-status">
+                        <span class="badge-dot idle"></span>
+                        <span>Bot Status</span>
+                    </div>
+                    <a href="/logout" class="logout-btn" title="Sign out">⎋ Logout</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-grid">
+            <!-- Status Panel -->
+            <section class="panel status-panel">
+                <div class="panel-header">
+                    <h2>📊 Status</h2>
+                </div>
+                <div class="panel-content" id="status-content">
+                    <div class="status-item">
+                        <div class="status-label">Current State</div>
+                        <div class="status-value" id="current-state">Idle</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Active Connections</div>
+                        <div class="status-value" id="active-connections">1</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Last Activity</div>
+                        <div class="status-value" id="last-activity">Never</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Files Received</div>
+                        <div class="status-value" id="files-received">0</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Active Downloads Panel (hidden until a download is in progress) -->
+            <section class="panel active-downloads-panel" id="active-downloads-panel" style="display:none">
+                <div class="panel-header">
+                    <h2>⬇️ Active Downloads</h2>
+                    <span class="panel-count" id="active-downloads-count">0 active</span>
+                </div>
+                <div class="panel-content" id="active-downloads-content"></div>
+            </section>
+
+            <!-- Downloads Panel -->
+            <section class="panel downloads-panel">
+                <div class="panel-header">
+                    <h2>📥 Downloads</h2>
+                    <span class="panel-count" id="downloads-count">0 files</span>
+                </div>
+                <div class="panel-content" id="downloads-content">
+                    <div class="empty-state" id="downloads-empty">
+                        <div class="empty-icon">📂</div>
+                        <p>No files received yet</p>
+                        <small>Send any file to your Telegram bot to save it here</small>
+                    </div>
+                    <ul class="downloads-list" id="downloads-list"></ul>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Real-time dashboard powered by WebSocket | Built with FastAPI &amp; Telegram Bot API</p>
+        </footer>
+    </div>
+
+    <script src="/static/app.js"></script>
+
+    <!-- File Preview Modal -->
+    <div id="preview-modal" class="preview-modal" role="dialog" aria-modal="true">
+        <div class="preview-backdrop" onclick="closePreview()"></div>
+        <div class="preview-container">
+            <div class="preview-header">
+                <span class="preview-filename" id="preview-filename"></span>
+                <div class="preview-actions">
+                    <a class="preview-download-btn" id="preview-download-btn" download>⬇ Download</a>
+                    <button class="preview-close-btn" onclick="closePreview()" title="Close">✕</button>
+                </div>
+            </div>
+            <div class="preview-body" id="preview-body"></div>
+        </div>
+    </div>
+</body>
+
+</html>

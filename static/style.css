@@ -1,0 +1,890 @@
+:root {
+    --bg-primary: #0a0b0f;
+    --bg-secondary: #13151d;
+    --bg-tertiary: #1a1d2e;
+    --accent-primary: #6366f1;
+    --accent-secondary: #8b5cf6;
+    --accent-tertiary: #ec4899;
+    --text-primary: #f5f5f7;
+    --text-secondary: #a1a1aa;
+    --border-color: rgba(99, 102, 241, 0.2);
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #0a0b0f 0%, #13151d 50%, #1a1d2e 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header */
+.header {
+    background: rgba(26, 29, 46, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.status-badges {
+    display: flex;
+    gap: 1rem;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.badge-dot.online {
+    background: var(--success);
+    box-shadow: 0 0 10px var(--success);
+}
+
+.badge-dot.offline {
+    background: var(--error);
+}
+
+.badge-dot.idle {
+    background: var(--warning);
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Main Grid */
+.main-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Panels */
+.panel {
+    background: rgba(26, 29, 46, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.panel:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 12px 48px rgba(99, 102, 241, 0.2);
+}
+
+.conversation-panel,
+.thinking-panel {
+    grid-column: span 1;
+}
+
+.panel-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.panel-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.panel-count {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    padding: 0.25rem 0.75rem;
+    background: rgba(99, 102, 241, 0.2);
+    border-radius: 12px;
+}
+
+.panel-content {
+    padding: 1.5rem;
+    max-height: 500px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+.panel-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
+    border-radius: 4px;
+}
+
+.panel-content::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-secondary);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state small {
+    font-size: 0.875rem;
+    opacity: 0.7;
+}
+
+/* Messages */
+.message {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-telegram {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+    border-left: 3px solid var(--accent-primary);
+}
+
+.message-gemini {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.15));
+    border-left: 3px solid var(--accent-secondary);
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.message-user {
+    font-weight: 600;
+    color: var(--accent-primary);
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.message-text {
+    color: var(--text-primary);
+    line-height: 1.6;
+    word-wrap: break-word;
+}
+
+/* Terminal Style */
+.terminal-style {
+    background: #000;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 0.875rem;
+}
+
+.terminal-line {
+    padding: 0.25rem 0;
+    color: #00ff00;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.terminal-line.stderr {
+    color: #ff6b6b;
+}
+
+.terminal-line.stdout {
+    color: #51cf66;
+}
+
+/* Thinking Indicator */
+.thinking-indicator {
+    display: none;
+    gap: 0.25rem;
+}
+
+.thinking-indicator.active {
+    display: flex;
+}
+
+.thinking-indicator .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    animation: bounce 1.4s infinite ease-in-out;
+}
+
+.thinking-indicator .dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.thinking-indicator .dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
+    }
+}
+
+/* Status Items */
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    background: rgba(99, 102, 241, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
+}
+
+.status-item:hover {
+    background: rgba(99, 102, 241, 0.1);
+    transform: translateX(5px);
+}
+
+.status-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.status-value {
+    font-weight: 600;
+    color: var(--accent-primary);
+    font-size: 1rem;
+}
+
+/* Command Items */
+.command-item {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    background: rgba(99, 102, 241, 0.05);
+    border-radius: 12px;
+    border-left: 3px solid var(--accent-primary);
+    animation: slideIn 0.3s ease;
+}
+
+.command-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.command-user {
+    font-weight: 600;
+    color: var(--accent-primary);
+    font-size: 0.875rem;
+}
+
+.command-time {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.command-text {
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 2rem 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: 1rem;
+    }
+
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+}
+
+/* Error Messages */
+.error-message {
+    padding: 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 3px solid var(--error);
+    border-radius: 12px;
+    color: var(--error);
+    margin-bottom: 1rem;
+    animation: slideIn 0.3s ease;
+}
+
+/* System Messages */
+.system-message {
+    padding: 1rem;
+    background: rgba(16, 185, 129, 0.1);
+    border-left: 3px solid var(--success);
+    border-radius: 12px;
+    color: var(--success);
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    animation: slideIn 0.3s ease;
+}
+
+/* ---- Downloads Panel ---- */
+.downloads-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.download-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    margin-bottom: 0.5rem;
+    background: rgba(99, 102, 241, 0.06);
+    border: 1px solid rgba(99, 102, 241, 0.12);
+    border-radius: 12px;
+    animation: slideIn 0.3s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.download-item:hover {
+    background: rgba(99, 102, 241, 0.12);
+    transform: translateX(4px);
+}
+
+.download-item .download-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.delete-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(139, 92, 246, 0.10));
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    border-radius: 20px;
+    color: #a5b4fc;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: inherit;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease,
+        background 0.25s ease, box-shadow 0.25s ease,
+        border-color 0.25s ease, color 0.25s ease;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.delete-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, transparent 60%);
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.delete-btn::before {
+    content: "✕";
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+.download-item:hover .delete-btn {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.delete-btn:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.28), rgba(220, 38, 38, 0.15));
+    border-color: rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.35), inset 0 0 4px rgba(239, 68, 68, 0.15);
+    color: #ffffff;
+    transform: translateX(0) scale(1.04);
+}
+
+.delete-btn:active {
+    transform: translateX(0) scale(0.96);
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.2);
+}
+
+.download-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.download-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.download-link {
+    color: var(--accent-primary);
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.2s ease;
+}
+
+.download-link:hover {
+    color: var(--accent-secondary);
+    text-decoration: underline;
+}
+
+.download-meta {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* The following styles are appended based on the user's request.
+   Note: There were some syntax issues and conflicting redefinitions in the provided "Code Edit" block.
+   I've interpreted the intent to append new, distinct styles for logout and active downloads,
+   and corrected the syntax where necessary. The redefinitions of .download-item, .download-icon,
+   .download-info, .download-link, and .download-meta from the provided "Code Edit" were
+   interpreted as new styles for a different context or as errors, and thus were not included
+   to avoid conflicts and maintain a syntactically correct CSS file, as the instruction was
+   to "append logout button and Active Downloads progress bar styles". */
+
+/* ── Logout button ───────────────────────────────────────── */
+.logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 14px;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 8px;
+    color: #fca5a5;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.22);
+}
+
+/* ── Active Downloads panel ──────────────────────────────── */
+.active-download-item {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.adl-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.adl-icon {
+    font-size: 1rem;
+}
+
+.adl-name {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adl-pct {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6366f1;
+    min-width: 36px;
+    text-align: right;
+}
+
+.adl-bar-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.adl-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+}
+
+.adl-meta {
+    margin-top: 5px;
+    font-size: 0.73rem;
+    color: #64748b;
+}
+
+/* ── View button ─────────────────────────────────────────── */
+.view-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(139, 92, 246, 0.10));
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    border-radius: 20px;
+    color: #a5b4fc;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: inherit;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease,
+        background 0.25s ease, box-shadow 0.25s ease,
+        border-color 0.25s ease, color 0.25s ease;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.download-item:hover .view-btn {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.view-btn:hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.35), rgba(139, 92, 246, 0.25));
+    border-color: rgba(99, 102, 241, 0.7);
+    box-shadow: 0 0 16px rgba(99, 102, 241, 0.35), inset 0 0 4px rgba(99, 102, 241, 0.15);
+    color: #ffffff;
+    transform: translateX(0) scale(1.04);
+}
+
+.view-btn:active {
+    transform: translateX(0) scale(0.96);
+}
+
+/* ── Preview Modal ───────────────────────────────────────── */
+.preview-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-modal.open {
+    display: flex;
+}
+
+.preview-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+}
+
+.preview-container {
+    position: relative;
+    z-index: 1;
+    background: rgba(19, 21, 29, 0.92);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 20px;
+    width: min(92vw, 960px);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(99, 102, 241, 0.1);
+    animation: modalIn 0.25s ease;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+    background: rgba(99, 102, 241, 0.05);
+    flex-shrink: 0;
+}
+
+.preview-filename {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.preview-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.preview-download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 14px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(139, 92, 246, 0.10));
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    border-radius: 20px;
+    color: #a5b4fc;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+
+.preview-download-btn:hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.35), rgba(139, 92, 246, 0.25));
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+    color: #fff;
+}
+
+.preview-close-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.preview-close-btn:hover {
+    background: rgba(239, 68, 68, 0.18);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+    transform: scale(1.1);
+}
+
+.preview-body {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    min-height: 200px;
+}
+
+.preview-video {
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: 10px;
+    background: #000;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+.preview-pdf {
+    width: 100%;
+    height: 70vh;
+    border: none;
+    border-radius: 10px;
+}
+
+.preview-audio-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.preview-audio-icon {
+    font-size: 4rem;
+    animation: pulse 2s infinite;
+}
+
+.preview-audio {
+    width: 100%;
+    max-width: 480px;
+}
+
+.preview-unsupported {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+}
+
+.preview-unsupported p {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+}

@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+venv/
+env/
+.env.local
+
+# Secrets — keep .env.example, ignore the live .env
+.env
+
+# Downloaded files (user data, not code)
+downloads/
+
+# Pyrogram session files
+*.session
+*.session-journal
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+telegram-gemini-dashboard.zip
