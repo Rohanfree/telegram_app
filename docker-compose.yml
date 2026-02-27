@@ -8,10 +8,13 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./.env:/app/.env
+      - ./.env:/app/.env:ro
       - ./downloads:/app/downloads
-      - ./pyrogram_session.session:/app/pyrogram_session.session
+      - session_data:/app/session
     environment:
       - HOST=0.0.0.0
       - PORT=8000
       - RELOAD=false
+
+volumes:
+  session_data:

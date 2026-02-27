@@ -85,12 +85,20 @@ class PyrogramHandler:
         self._broadcast_progress = broadcast_progress
         self._broadcast_file_received = broadcast_file_received
 
+        # Use /app/session (persistent Docker volume) when running in a container,
+        # otherwise fall back to the downloads dir parent for bare-metal installs.
+        _session_dir = Path("/app/session")
+        if _session_dir.is_dir():
+            _workdir = str(_session_dir)
+        else:
+            _workdir = str(self.downloads_dir.parent)
+
         self.client = Client(
             name="pyrogram_session",
             api_id=self.api_id,
             api_hash=self.api_hash,
             phone_number=self.phone,
-            workdir=str(Path(".").resolve()),
+            workdir=_workdir,
         )
 
         _handler = self  # capture self for nested async def
